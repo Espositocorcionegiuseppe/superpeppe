@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superpeppe - Archivio Software e Programmi su OneDrive</title>
+    <meta name="description" content="Superpeppe: raccolta personale e download diretto dei migliori programmi, utility e software di sviluppo da OneDrive.">
+    <meta name="keywords" content="Superpeppe, download programmi, utility, software hub, OneDrive">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Anteprima per condivisione su WhatsApp, Teams e Social -->
+    <meta property="og:title" content="Superpeppe - Software Hub">
+    <meta property="og:description" content="Scarica rapidamente tutti i programmi e le utility selezionate da Superpeppe.">
+    <meta property="og:type" content="website">
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-hover: #283548;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #60a5fa, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 260px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background-color: var(--card-hover);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .version {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Superpeppe</h1>
+        <p>Il mio archivio personale di software e utility su OneDrive</p>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
+        <div class="filter-buttons" id="categoryFilters">
+            <button class="filter-btn active" data-category="Tutti">Tutti</button>
+            <button class="filter-btn" data-category="Sviluppo">Sviluppo</button>
+            <button class="filter-btn" data-category="Utility">Utility</button>
+            <button class="filter-btn" data-category="Multimedia">Multimedia</button>
+        </div>
+    </div>
+
+    <div class="grid" id="softwareGrid"></div>
+
+    <footer>
+        Superpeppe Software Hub &bull; Tutti i file sono ospitati su OneDrive
+    </footer>
+</div>
+
+<script>
+    // =========================================================================
+    // I TUOI PROGRAMMI SU ONEDRIVE
+    // Sostituisci i link di esempio con quelli generati dal tuo OneDrive
+    // (Assicurati che su OneDrive siano impostati su "Chiunque abbia il link")
+    // =========================================================================
+    const programmi = [
+        {
+            nome: "7-Zip Portable",
+            categoria: "Utility",
+            versione: "v24.08 x64",
+            descrizione: "Gestore di archivi compressi leggero e veloce, versione senza installazione.",
+            linkOneDrive: "https://1drv.ms"
+        },
+        {
+            nome: "Notepad++ Custom",
+            categoria: "Sviluppo",
+            versione: "v8.7",
+            descrizione: "Editor di testo e codice sorgente con i miei plugin già configurati.",
+            linkOneDrive: "https://1drv.ms"
+        },
+        {
+            nome: "VLC Media Player",
+            categoria: "Multimedia",
+            versione: "v3.0.21",
+            descrizione: "Lettore multimediale universale per qualsiasi formato audio e video.",
+            linkOneDrive: "https://1drv.ms"
+        },
+        {
+            nome: "Sysinternals Suite",
+            categoria: "Utility",
+            versione: "Edition",
+            descrizione: "Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.",
+            linkOneDrive: "https://1drv.ms"
+        }
+    ];
+
+    const grid = document.getElementById('softwareGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    let currentCategory = 'Tutti';
+
+    function renderCards() {
+        const query = searchInput.value.toLowerCase();
+        grid.innerHTML = '';
+
+        const filtered = programmi.filter(prog => {
+            const matchesCategory = currentCategory === 'Tutti' || prog.categoria === currentCategory;
+            const matchesSearch = prog.nome.toLowerCase().includes(query) || 
+                                  prog.descrizione.toLowerCase().includes(query);
+            return matchesCategory && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">Nessun programma trovato.</p>';
+            return;
+        }
+
+        filtered.forEach(prog => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div>
+                    <div class="card-header">
+                        <span class="badge">${prog.categoria}</span>
+                        <span class="version">${prog.versione}</span>
+                    </div>
+                    <h2>${prog.nome}</h2>
+                    <p>${prog.descrizione}</p>
+                </div>
+                <a href="${prog.linkOneDrive}" target="_blank" rel="noopener noreferrer" class="download-btn">
+                    Scarica da OneDrive
+                </a>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    searchInput.addEventListener('input', renderCards);
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.getAttribute('data-category');
+            renderCards();
+        });
+    });
+
+    renderCards();
+</script>
+
+</body>
+</html>

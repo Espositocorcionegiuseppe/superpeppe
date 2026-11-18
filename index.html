@@ -1,161 +1,325 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Superpeppe - Software Hub</title>
-<style>
-:root { --bg: #f1f5f9; --card: #ffffff; --primary: #2563eb; --primary-h: #1d4ed8; --lock: #d97706; --lock-h: #b45309; --text: #0f172a; --muted: #64748b; --border: #e2e8f0; }
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-body { background: var(--bg); color: var(--text); padding: 1.5rem 1rem 3rem; }
-.container { max-width: 1150px; margin: 0 auto; }
-.top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: var(--card); padding: 0.7rem 1.2rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 2rem; font-size: 0.9rem; color: var(--muted); gap: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
-.top-bar strong { color: var(--text); }
-.status-group { display: flex; gap: 1.2rem; }
-header { text-align: center; margin-bottom: 2rem; }
-header h1 { font-size: 2.8rem; font-weight: 800; color: var(--primary); margin-bottom: 0.4rem; }
-header p { color: var(--muted); font-size: 1.1rem; }
-.controls { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.search-box { flex: 1; min-width: 250px; padding: 0.75rem 1.2rem; border-radius: 8px; border: 1px solid var(--border); background: var(--card); font-size: 0.95rem; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
-.search-box:focus { border-color: var(--primary); }
-.filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-.filter-btn { padding: 0.65rem 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
-.filter-btn:hover { background: #e2e8f0; color: var(--text); }
-.filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
-.card:hover { transform: translateY(-4px); }
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.badge { font-size: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 999px; background: #eff6ff; color: var(--primary); font-weight: 700; border: 1px solid #bfdbfe; }
-.badge.locked-badge { background: #fef3c7; color: var(--lock); border-color: #fde68a; }
-.version { font-size: 0.85rem; color: var(--muted); }
-.card h2 { font-size: 1.25rem; margin-bottom: 0.5rem; }
-.card p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; }
-.download-btn { display: block; width: 100%; text-align: center; padding: 0.75rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
-.download-btn:hover { background: var(--primary-h); }
-.download-btn.btn-locked { background: var(--lock); }
-.download-btn.btn-locked:hover { background: var(--lock-h); }
-.modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
-.modal-overlay.open { display: flex; }
-.modal-box { background: var(--card); padding: 2rem; border-radius: 14px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 25px rgba(0,0,0,0.15); }
-.modal-box h3 { margin-bottom: 0.5rem; }
-.modal-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
-.modal-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 0.75rem; }
-.error-msg { color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
-.modal-actions { display: flex; gap: 0.75rem; }
-.btn-cancel { flex: 1; padding: 0.7rem; border: 1px solid var(--border); background: #f8fafc; border-radius: 8px; font-weight: 600; cursor: pointer; }
-.btn-confirm { flex: 1; padding: 0.7rem; border: none; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 600; cursor: pointer; }
-footer { text-align: center; margin-top: 4rem; color: var(--muted); font-size: 0.9rem; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superpeppe - Software Hub</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --locked: #f59e0b;
+      --locked-hover: #d97706;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 1.5rem 1rem 4rem; }
+    .container { max-width: 1180px; margin: 0 auto; }
+
+    /* Barra superiore elegante */
+    .top-bar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      background: var(--card); padding: 0.75rem 1.25rem; border-radius: 12px;
+      border: 1px solid var(--border); margin-bottom: 2rem; font-size: 0.9rem;
+      color: var(--muted); gap: 1rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .top-bar strong { color: var(--text); }
+    .status-group { display: flex; align-items: center; gap: 1.5rem; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-right: 6px; }
+
+    /* Intestazione moderna */
+    header { text-align: center; margin-bottom: 2.5rem; }
+    header h1 {
+      font-size: 3rem; font-weight: 800; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+    }
+    header p { color: var(--muted); font-size: 1.1rem; }
+
+    /* Ricerca e Tab affiancati */
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between;
+      align-items: center; margin-bottom: 2rem;
+    }
+    .search-box {
+      flex: 1; min-width: 260px; padding: 0.8rem 1.2rem; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--card); font-size: 0.95rem;
+      outline: none; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03); transition: 0.2s;
+    }
+    .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+
+    .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 0.65rem 1.1rem; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--card); color: var(--muted); cursor: pointer; font-weight: 600;
+      font-size: 0.9rem; transition: all 0.2s; box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+    }
+    .filter-btn:hover { background: #f1f5f9; color: var(--text); transform: translateY(-1px); }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25); }
+
+    /* Griglia Schede */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 1.6rem; display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04); transition: all 0.25s ease;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08); border-color: #cbd5e1; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .badge {
+      font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 999px;
+      background: #eff6ff; color: var(--primary); font-weight: 700; border: 1px solid #dbeafe;
+    }
+    .badge.locked-badge { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .version { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+    .card h2 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text); }
+    .card p { color: var(--muted); font-size: 0.95rem; line-height: 1.55; margin-bottom: 1.5rem; }
+
+    .download-btn {
+      display: block; width: 100%; text-align: center; padding: 0.8rem;
+      background: var(--primary); color: #fff; text-decoration: none; border: none;
+      border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s;
+    }
+    .download-btn:hover { background: var(--primary-hover); }
+    .download-btn.btn-locked { background: var(--locked); }
+    .download-btn.btn-locked:hover { background: var(--locked-hover); }
+
+    /* Modale Password */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);
+      display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--card); padding: 2rem; border-radius: 16px; max-width: 390px;
+      width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .modal-box h3 { margin-bottom: 0.5rem; font-size: 1.3rem; }
+    .modal-box p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.25rem; }
+    .modal-input {
+      width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 1rem; margin-bottom: 0.75rem; outline: none;
+    }
+    .modal-input:focus { border-color: var(--primary); }
+    .error-msg { color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; font-weight: 500; }
+    .modal-actions { display: flex; gap: 0.75rem; }
+    .btn-cancel {
+      flex: 1; padding: 0.75rem; border: 1px solid var(--border); background: #f8fafc;
+      border-radius: 10px; font-weight: 600; cursor: pointer;
+    }
+    .btn-confirm {
+      flex: 1; padding: 0.75rem; border: none; background: var(--primary);
+      color: #fff; border-radius: 10px; font-weight: 600; cursor: pointer;
+    }
+    footer { text-align: center; margin-top: 4rem; color: var(--muted); font-size: 0.9rem; }
+  </style>
 </head>
 <body>
+
 <div class="container">
   <div class="top-bar">
     <div class="status-group">
-      <span>Data: <strong id="currentDate">18/11/2026</strong></span>
-      <span>Ora: <strong id="currentTime">13:45:00</strong></span>
+      <span><span class="live-dot"></span>Data: <strong id="currentDate">18/11/2026</strong></span>
+      <span>Ora: <strong id="currentTime">13:54:00</strong></span>
     </div>
-    <div>Visite: <strong id="visitCounter">1</strong></div>
+    <div>Visite totali: <strong id="visitCounter">1</strong></div>
   </div>
+
   <header>
     <h1>Superpeppe</h1>
-    <p>Il mio archivio personale di software e utility su OneDrive</p>
+    <p>Il mio archivio personale di software, tool e utility su OneDrive</p>
   </header>
+
   <div class="controls">
     <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
-    <div class="filter-buttons" id="categoryFilters"></div>
-  </div>
-  <div class="grid" id="softwareGrid"></div>
-  <footer>Superpeppe Software Hub &bull; Tutti i file sono ospitati su OneDrive</footer>
-</div>
-
-<div class="modal-overlay" id="passwordModal">
-  <div class="modal-box">
-    <h3>Area Protetta</h3>
-    <p id="modalDesc">Inserisci la password per scaricare questo file.</p>
-    <input type="password" id="passwordInput" class="modal-input" placeholder="Password...">
-    <div class="error-msg" id="passwordError">Password errata. Riprova!</div>
-    <div class="modal-actions">
-      <button class="btn-cancel" id="cancelModal">Annulla</button>
-      <button class="btn-confirm" id="confirmPassword">Sblocca</button>
+    <div class="filter-buttons" id="categoryFilters">
+      <button class="filter-btn active" data-cat="Tutti">Tutti</button>
+      <button class="filter-btn" data-cat="Utility">Utility</button>
+      <button class="filter-btn" data-cat="Sviluppo">Sviluppo</button>
+      <button class="filter-btn" data-cat="Multimedia">Multimedia</button>
+      <button class="filter-btn" data-cat="Rete">Rete</button>
+      <button class="filter-btn" data-cat="Sicurezza">🔒 Sicurezza</button>
+      <button class="filter-btn" data-cat="Riservati">🔒 Riservati</button>
     </div>
   </div>
-</div>
 
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  var PASSWORD_SEGRETA = "peppe2026";
-  var programmi = [
-    { nome: "7-Zip Portable", categoria: "Utility", versione: "v24.08 x64", descrizione: "Gestore di archivi compressi leggero e veloce, versione senza installazione.", linkOneDrive: "https://1drv.ms", protetto: false },
-    { nome: "Notepad++ Custom", categoria: "Sviluppo", versione: "v8.7", descrizione: "Editor di testo e codice sorgente con i miei plugin gia configurati.", linkOneDrive: "https://1drv.ms", protetto: false },
-    { nome: "VLC Media Player", categoria: "Multimedia", versione: "v3.0.21", descrizione: "Lettore multimediale universale per qualsiasi formato audio e video.", linkOneDrive: "https://1drv.ms", protetto: false },
-    { nome: "Sysinternals Suite", categoria: "Utility", versione: "Edition", descrizione: "Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.", linkOneDrive: "https://1drv.ms", protetto: false },
-    { nome: "Advanced IP Scanner", categoria: "Rete", versione: "v2.5", descrizione: "Scanner di rete veloce per rilevare tutti i dispositivi connessi in LAN.", linkOneDrive: "https://1drv.ms", protetto: false },
-    { nome: "Kit Manutenzione Pro", categoria: "Riservati", versione: "v4.2 VIP", descrizione: "Pacchetto privato con script di ottimizzazione e tool diagnostici avanzati.", linkOneDrive: "https://1drv.ms", protetto: true },
-    { nome: "Backup Configurazioni", categoria: "Sicurezza", versione: "Archivio", descrizione: "File di configurazione personali e profili software protetti da password.", linkOneDrive: "https://1drv.ms", protetto: true }
-  ];
+  <div class="grid" id="softwareGrid">
+    <!-- Scheda 1 -->
+    <div class="card" data-category="Utility" data-locked="false" data-url="https://1drv.ms">
+      <div>
+        <div class="card-header">
+          <span class="badge">Utility</span>
+          <span class="version">v24.08 x64</span>
+        </div>
+        <h2>7-Zip Portable</h2>
+        <p>Gestore di archivi compressi leggero e veloce, versione senza installazione.</p>
+      </div>
+      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
+    </div>
 
-  function updateDateTime() {
-    var now = new Date();
-    document.getElementById('currentDate').textContent = now.toLocaleDateString('it-IT');
-    document.getElementById('currentTime').textContent = now.toLocaleTimeString('it-IT');
-  }
-  setInterval(updateDateTime, 1000);
-  updateDateTime();
+    <!-- Scheda 2 -->
+    <div class="card" data-category="Sviluppo" data-locked="false" data-url="https://1drv.ms">
+      <div>
+        <div class="card-header">
+          <span class="badge">Sviluppo</span>
+          <span class="version">v8.7</span>
+        </div>
+        <h2>Notepad++ Custom</h2>
+        <p>Editor di testo e codice sorgente con i miei plugin già configurati.</p>
+      </div>
+      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
+    </div>
 
-  try {
-    var visits = localStorage.getItem('superpeppe_visits');
-    visits = visits ? parseInt(visits, 10) + 1 : 1;
-    localStorage.setItem('superpeppe_visits', visits);
-    document.getElementById('visitCounter').textContent = visits;
-  } catch (e) {}
+    <!-- Scheda 3 -->
+    <div class="card" data-category="Multimedia" data-locked="false" data-url="https://1drv.ms">
+      <div>
+        <div class="card-header">
+          <span class="badge">Multimedia</span>
+          <span class="version">v3.0.21</span>
+        </div>
+        <h2>VLC Media Player</h2>
+        <p>Lettore multimediale universale per qualsiasi formato audio e video.</p>
+      </div>
+      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
+    </div>
 
-  var grid = document.getElementById('softwareGrid');
-  var searchInput = document.getElementById('searchInput');
-  var filtersContainer = document.getElementById('categoryFilters');
-  var currentCategory = 'Tutti';
-  var pendingDownloadUrl = null;
-  var isUnlockedSession = false;
+    <!-- Scheda 4 -->
+    <div class="card" data-category="Utility" data-locked="false" data-url="https://1drv.ms">
+      <div>
+        <div class="card-header">
+          <span class="badge">Utility</span>
+          <span class="version">Edition</span>
+        </div>
+        <h2>Sysinternals Suite</h2>
+        <p>Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.</p>
+      </div>
+      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
+    </div>
 
-  function renderFilters() {
-    var cats = ['Tutti'];
-    for (var i = 0; i < programmi.length; i++) {
-      if (cats.indexOf(programmi[i].categoria) === -1) {
-        cats.push(programmi[i].categoria);
-      }
-    }
-    filtersContainer.innerHTML = '';
-    for (var j = 0; j < cats.length; j++) {
-      (function(cat) {
-        var btn = document.createElement('button');
-        btn.className = 'filter-btn' + (cat === currentCategory ? ' active' : '');
-        var hasProtected = programmi.some(function(p) { return p.categoria === cat && p.protetto; });
-        btn.textContent = (hasProtected ? '[Protetto] ' : '') + cat;
-        btn.onclick = function() {
-          currentCategory = cat;
-          renderFilters();
-          renderCards();
-        };
-        filtersContainer.appendChild(btn);
-      })(cats[j]);
-    }
-  }
+    <!-- Scheda 5 -->
+    <div class="card" data-category="Rete" data-locked="false" data-url="https://1drv.ms">
+      <div>
+        <div class="card-header">
+          <span class="badge">Rete</span>
+          <span class="version">v2.5</span>
+        </div>
+        <h2>Advanced IP Scanner</h2>
+        <p>Scanner di rete veloce per rilevare tutti i dispositivi connessi in LAN.</p>
+      </div>
+      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
+    </div>
 
-  function renderCards() {
-    var query = searchInput.value.toLowerCase();
-    grid.innerHTML = '';
-    var filtered = programmi.filter(function(prog) {
-      var matchCat = currentCategory === 'Tutti' || prog.categoria === currentCategory;
-      var matchSearch = prog.nome.toLowerCase().indexOf(query) !== -1 || prog.descrizione.toLowerCase().indexOf(query) !== -1;
-      return matchCat && matchSearch;
-    });
+    <!-- Scheda 6 (Protetta da Password) -->
+Usa il codice con cautela.
+🔒 Riservati
+v4.2 VIP
 
-    if (filtered.length === 0) {
-      grid.innerHTML = '<p style="color:#64748b;grid-column:1/-1;text-align:center;">Nessun programma trovato.</p>';
-      return;
-    }
+Kit Manutenzione Pro
+Pacchetto privato con script di ottimizzazione e tool diagnostici avanzati.
 
-    for (var i = 0; i < filtered.length; i++) {
-      (function(prog) {
-        var card = document.createElement('div');
-        card.className = 'card';
+Sblocca e Scarica
+🔒 Sicurezza
+Archivio
+
+Backup Configurazioni
+File di configurazione personali e profili software protetti da password.
+
+Sblocca e Scarica
+
+Superpeppe Software Hub • Tutti i file sono ospitati su OneDrive
+🔒 Area Protetta
+Inserisci la password per scaricare questo file.
+
+Password errata. Riprova!
+
+Annulla
+Sblocca
+
+
+const PASSWORD_SEGRETA = "peppe2026";
+// Orologio e data live
+function updateClock() {
+const now = new Date();
+document.getElementById('currentDate').textContent = now.toLocaleDateString('it-IT');
+document.getElementById('currentTime').textContent = now.toLocaleTimeString('it-IT');
+}
+setInterval(updateClock, 1000);
+updateClock();
+// Contatore visite
+try {
+let v = parseInt(localStorage.getItem('superpeppe_visits') || '0', 10) + 1;
+localStorage.setItem('superpeppe_visits', v);
+document.getElementById('visitCounter').textContent = v;
+} catch (e) {}
+// Filtri Tab e Ricerca
+const filterBtns = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.card');
+const searchInput = document.getElementById('searchInput');
+let activeCat = 'Tutti';
+function filterGrid() {
+const q = searchInput.value.toLowerCase();
+cards.forEach(card => {
+const cat = card.getAttribute('data-category');
+const text = card.textContent.toLowerCase();
+const show = (activeCat === 'Tutti' || cat === activeCat) && text.includes(q);
+card.style.display = show ? 'flex' : 'none';
+});
+}
+filterBtns.forEach(btn => {
+btn.addEventListener('click', () => {
+filterBtns.forEach(b => b.classList.remove('active'));
+btn.classList.add('active');
+activeCat = btn.getAttribute('data-cat');
+filterGrid();
+});
+});
+searchInput.addEventListener('input', filterGrid);
+// Gestione Password sui file protetti
+const modal = document.getElementById('passwordModal');
+const passInput = document.getElementById('passwordInput');
+const passError = document.getElementById('passwordError');
+let targetUrl = '';
+let unlocked = false;
+document.querySelectorAll('.card[data-locked="true"] .download-btn').forEach(btn => {
+btn.addEventListener('click', (e) => {
+if (!unlocked) {
+e.preventDefault();
+targetUrl = btn.getAttribute('href');
+passInput.value = '';
+passError.style.display = 'none';
+modal.classList.add('open');
+passInput.focus();
+}
+});
+});
+function verifyPassword() {
+if (passInput.value === PASSWORD_SEGRETA) {
+unlocked = true;
+modal.classList.remove('open');
+document.querySelectorAll('.btn-locked').forEach(b => {
+b.classList.remove('btn-locked');
+b.textContent = 'Scarica da OneDrive';
+});
+if (targetUrl) window.open(targetUrl, '_blank', 'noopener');
+} else {
+passError.style.display = 'block';
+passInput.focus();
+}
+}
+document.getElementById('cancelModal').addEventListener('click', () => modal.classList.remove('open'));
+document.getElementById('confirmPassword').addEventListener('click', verifyPassword);
+passInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') verifyPassword(); });
+
+### Come procedere su GitHub:
+1. Incolla il codice nel riquadro **Modifica** di `index.html`.
+2. Clicca sul tasto verde in alto a destra **"Conferma le modifiche..."** (*Commit changes*) e conferma nella finestra che si apre.
+3. Apri il link pubblico del tuo sito su GitHub Pages (oppure scarica `index.html` e aprilo sul browser): vedrai la data/ora scorrere in tempo reale, i tab filtrare istantaneamente e il lucchetto chiedere `peppe2026`!
+
+<FollowUp>
+Dopo aver cliccato su **"Conferma le modifiche..."**, se non sai dove trovare il link pubblico del tuo sito su GitHub Pages, chiedi pure e ti guido in 2 passaggi!
+</FollowUp>

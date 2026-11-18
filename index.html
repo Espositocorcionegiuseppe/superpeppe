@@ -6,320 +6,199 @@
   <title>Superpeppe - Software Hub</title>
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg-gradient: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 50%, #fdf2f8 100%);
       --card: #ffffff;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --locked: #f59e0b;
-      --locked-hover: #d97706;
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 1.5rem 1rem 4rem; }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1.5rem 1rem 4rem;
+    }
+
     .container { max-width: 1180px; margin: 0 auto; }
 
-    /* Barra superiore elegante */
+    /* Barra superiore colorata */
     .top-bar {
       display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-      background: var(--card); padding: 0.75rem 1.25rem; border-radius: 12px;
-      border: 1px solid var(--border); margin-bottom: 2rem; font-size: 0.9rem;
-      color: var(--muted); gap: 1rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
+      padding: 0.75rem 1.35rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.9);
+      margin-bottom: 2rem; font-size: 0.9rem; color: var(--muted); gap: 1rem;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.06);
     }
     .top-bar strong { color: var(--text); }
     .status-group { display: flex; align-items: center; gap: 1.5rem; }
-    .live-dot { display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-right: 6px; }
+    .live-dot {
+      display: inline-block; width: 9px; height: 9px; background: #10b981;
+      border-radius: 50%; margin-right: 6px; box-shadow: 0 0 8px #10b981;
+    }
+    .visit-pill {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white; padding: 0.3rem 0.85rem; border-radius: 999px; font-weight: 600; font-size: 0.85rem;
+    }
 
-    /* Intestazione moderna */
+    /* Header vibrante */
     header { text-align: center; margin-bottom: 2.5rem; }
     header h1 {
-      font-size: 3rem; font-weight: 800; letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%);
+      font-size: 3.2rem; font-weight: 900; letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%);
       -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
       margin-bottom: 0.4rem;
     }
-    header p { color: var(--muted); font-size: 1.1rem; }
+    header p { color: var(--muted); font-size: 1.12rem; }
 
-    /* Ricerca e Tab affiancati */
+    /* Controlli: Barra ricerca con occhialino + Tab colorati */
     .controls {
       display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between;
-      align-items: center; margin-bottom: 2rem;
+      align-items: center; margin-bottom: 2.2rem;
+    }
+
+    .search-wrapper {
+      position: relative; flex: 1; min-width: 280px;
+    }
+    .search-icon {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; color: #6366f1; pointer-events: none;
     }
     .search-box {
-      flex: 1; min-width: 260px; padding: 0.8rem 1.2rem; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--card); font-size: 0.95rem;
-      outline: none; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03); transition: 0.2s;
+      width: 100%; padding: 0.85rem 2.6rem 0.85rem 2.8rem; border-radius: 12px;
+      border: 2px solid transparent; background: var(--card); font-size: 0.95rem;
+      outline: none; box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05); transition: 0.25s;
     }
-    .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+    .search-box:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); }
+    .clear-search {
+      position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
+      background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 50%;
+      color: #475569; font-size: 0.75rem; cursor: pointer; display: none; align-items: center; justify-content: center;
+    }
+    .clear-search:hover { background: #cbd5e1; color: #0f172a; }
 
     .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .filter-btn {
-      padding: 0.65rem 1.1rem; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--card); color: var(--muted); cursor: pointer; font-weight: 600;
-      font-size: 0.9rem; transition: all 0.2s; box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+      padding: 0.65rem 1.1rem; border-radius: 11px; border: 1px solid var(--border);
+      background: var(--card); color: var(--muted); cursor: pointer; font-weight: 700;
+      font-size: 0.88rem; transition: all 0.2s; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
     }
-    .filter-btn:hover { background: #f1f5f9; color: var(--text); transform: translateY(-1px); }
-    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25); }
+    .filter-btn:hover { transform: translateY(-2px); color: var(--text); }
+    .filter-btn.active {
+      background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff;
+      border-color: transparent; box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+    }
 
-    /* Griglia Schede */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+    /* Griglia e Schede Colorate per Categoria */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.6rem; }
+
     .card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 1.6rem; display: flex; flex-direction: column; justify-content: space-between;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04); transition: all 0.25s ease;
+      background: var(--card); border-radius: 16px; padding: 1.6rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      border: 1px solid var(--border); border-top: 5px solid #3b82f6;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05); transition: all 0.25s ease;
     }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08); border-color: #cbd5e1; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(15, 23, 42, 0.1); }
+
+    /* Colori specifici per categoria */
+    .card[data-category="Utility"] { border-top-color: #2563eb; }
+    .card[data-category="Utility"] .badge { background: #dbeafe; color: #1d4ed8; }
+    .card[data-category="Utility"] .download-btn { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+
+    .card[data-category="Sviluppo"] { border-top-color: #7c3aed; }
+    .card[data-category="Sviluppo"] .badge { background: #ede9fe; color: #6d28d9; }
+    .card[data-category="Sviluppo"] .download-btn { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+
+    .card[data-category="Multimedia"] { border-top-color: #db2777; }
+    .card[data-category="Multimedia"] .badge { background: #fce7f3; color: #be185d; }
+    .card[data-category="Multimedia"] .download-btn { background: linear-gradient(135deg, #db2777, #ec4899); }
+
+    .card[data-category="Rete"] { border-top-color: #059669; }
+    .card[data-category="Rete"] .badge { background: #d1fae5; color: #047857; }
+    .card[data-category="Rete"] .download-btn { background: linear-gradient(135deg, #059669, #10b981); }
+
+    .card[data-locked="true"] { border-top-color: #f59e0b; }
+    .card[data-locked="true"] .badge { background: #fef3c7; color: #b45309; }
+    .card[data-locked="true"] .download-btn.btn-locked { background: linear-gradient(135deg, #d97706, #f59e0b); }
+
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .badge {
-      font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 999px;
-      background: #eff6ff; color: var(--primary); font-weight: 700; border: 1px solid #dbeafe;
-    }
-    .badge.locked-badge { background: #fef3c7; color: #b45309; border-color: #fde68a; }
-    .version { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
-    .card h2 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text); }
+    .badge { font-size: 0.76rem; padding: 0.32rem 0.8rem; border-radius: 999px; font-weight: 800; letter-spacing: 0.02em; }
+    .version { font-size: 0.85rem; color: var(--muted); font-weight: 600; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 6px; }
+    .card h2 { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text); }
     .card p { color: var(--muted); font-size: 0.95rem; line-height: 1.55; margin-bottom: 1.5rem; }
 
+    /* Pulsante e Barra di Download */
+    .download-area { width: 100%; }
     .download-btn {
-      display: block; width: 100%; text-align: center; padding: 0.8rem;
-      background: var(--primary); color: #fff; text-decoration: none; border: none;
-      border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s;
+      display: flex; justify-content: center; align-items: center; gap: 0.5rem;
+      width: 100%; padding: 0.85rem; color: #fff; text-decoration: none; border: none;
+      border-radius: 11px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      transition: filter 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .download-btn:hover { background: var(--primary-hover); }
-    .download-btn.btn-locked { background: var(--locked); }
-    .download-btn.btn-locked:hover { background: var(--locked-hover); }
+    .download-btn:hover { filter: brightness(1.08); }
+    .download-btn:active { transform: scale(0.98); }
+
+    .progress-wrapper { display: none; margin-top: 0.6rem; }
+    .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: #4f46e5; margin-bottom: 0.35rem; }
+    .progress-track { width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #4f46e5, #06b6d4, #10b981); border-radius: 999px; transition: width 0.15s ease; }
+
+    /* Box Risposta "Nessun risultato trovato" */
+    .empty-state {
+      display: none; grid-column: 1 / -1; background: var(--card); border-radius: 16px;
+      padding: 3rem 1.5rem; text-align: center; border: 2px dashed #cbd5e1;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+    .empty-state-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+    .empty-state h3 { font-size: 1.3rem; color: var(--text); margin-bottom: 0.4rem; }
+    .empty-state p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.25rem; }
+    .reset-btn {
+      padding: 0.7rem 1.4rem; background: var(--primary); color: white; border: none;
+      border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s;
+    }
+    .reset-btn:hover { background: var(--primary-hover); }
 
     /* Modale Password */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
       display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
     }
     .modal-overlay.open { display: flex; }
     .modal-box {
-      background: var(--card); padding: 2rem; border-radius: 16px; max-width: 390px;
-      width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      background: var(--card); padding: 2.2rem; border-radius: 18px; max-width: 400px;
+      width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+      border-top: 6px solid #f59e0b;
     }
-    .modal-box h3 { margin-bottom: 0.5rem; font-size: 1.3rem; }
+    .modal-box h3 { margin-bottom: 0.5rem; font-size: 1.35rem; }
     .modal-box p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.25rem; }
     .modal-input {
-      width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border);
+      width: 100%; padding: 0.85rem 1rem; border: 2px solid var(--border);
       border-radius: 10px; font-size: 1rem; margin-bottom: 0.75rem; outline: none;
     }
-    .modal-input:focus { border-color: var(--primary); }
-    .error-msg { color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; font-weight: 500; }
+    .modal-input:focus { border-color: #f59e0b; }
+    .error-msg {
+      background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;
+      padding: 0.5rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem;
+      display: none; font-weight: 600;
+    }
     .modal-actions { display: flex; gap: 0.75rem; }
     .btn-cancel {
       flex: 1; padding: 0.75rem; border: 1px solid var(--border); background: #f8fafc;
-      border-radius: 10px; font-weight: 600; cursor: pointer;
+      border-radius: 10px; font-weight: 700; cursor: pointer;
     }
     .btn-confirm {
-      flex: 1; padding: 0.75rem; border: none; background: var(--primary);
-      color: #fff; border-radius: 10px; font-weight: 600; cursor: pointer;
+      flex: 1; padding: 0.75rem; border: none; background: linear-gradient(135deg, #d97706, #f59e0b);
+      color: #fff; border-radius: 10px; font-weight: 700; cursor: pointer;
     }
-    footer { text-align: center; margin-top: 4rem; color: var(--muted); font-size: 0.9rem; }
+
+    footer { text-align: center; margin-top: 4rem; color: var(--muted); font-size: 0.9rem; font-weight: 500; }
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="top-bar">
-    <div class="status-group">
-      <span><span class="live-dot"></span>Data: <strong id="currentDate">18/11/2026</strong></span>
-      <span>Ora: <strong id="currentTime">13:54:00</strong></span>
-    </div>
-    <div>Visite totali: <strong id="visitCounter">1</strong></div>
-  </div>
-
-  <header>
-    <h1>Superpeppe</h1>
-    <p>Il mio archivio personale di software, tool e utility su OneDrive</p>
-  </header>
-
-  <div class="controls">
-    <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
-    <div class="filter-buttons" id="categoryFilters">
-      <button class="filter-btn active" data-cat="Tutti">Tutti</button>
-      <button class="filter-btn" data-cat="Utility">Utility</button>
-      <button class="filter-btn" data-cat="Sviluppo">Sviluppo</button>
-      <button class="filter-btn" data-cat="Multimedia">Multimedia</button>
-      <button class="filter-btn" data-cat="Rete">Rete</button>
-      <button class="filter-btn" data-cat="Sicurezza">🔒 Sicurezza</button>
-      <button class="filter-btn" data-cat="Riservati">🔒 Riservati</button>
-    </div>
-  </div>
-
-  <div class="grid" id="softwareGrid">
-    <!-- Scheda 1 -->
-    <div class="card" data-category="Utility" data-locked="false" data-url="https://1drv.ms">
-      <div>
-        <div class="card-header">
-          <span class="badge">Utility</span>
-          <span class="version">v24.08 x64</span>
-        </div>
-        <h2>7-Zip Portable</h2>
-        <p>Gestore di archivi compressi leggero e veloce, versione senza installazione.</p>
-      </div>
-      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
-    </div>
-
-    <!-- Scheda 2 -->
-    <div class="card" data-category="Sviluppo" data-locked="false" data-url="https://1drv.ms">
-      <div>
-        <div class="card-header">
-          <span class="badge">Sviluppo</span>
-          <span class="version">v8.7</span>
-        </div>
-        <h2>Notepad++ Custom</h2>
-        <p>Editor di testo e codice sorgente con i miei plugin già configurati.</p>
-      </div>
-      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
-    </div>
-
-    <!-- Scheda 3 -->
-    <div class="card" data-category="Multimedia" data-locked="false" data-url="https://1drv.ms">
-      <div>
-        <div class="card-header">
-          <span class="badge">Multimedia</span>
-          <span class="version">v3.0.21</span>
-        </div>
-        <h2>VLC Media Player</h2>
-        <p>Lettore multimediale universale per qualsiasi formato audio e video.</p>
-      </div>
-      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
-    </div>
-
-    <!-- Scheda 4 -->
-    <div class="card" data-category="Utility" data-locked="false" data-url="https://1drv.ms">
-      <div>
-        <div class="card-header">
-          <span class="badge">Utility</span>
-          <span class="version">Edition</span>
-        </div>
-        <h2>Sysinternals Suite</h2>
-        <p>Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.</p>
-      </div>
-      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
-    </div>
-
-    <!-- Scheda 5 -->
-    <div class="card" data-category="Rete" data-locked="false" data-url="https://1drv.ms">
-      <div>
-        <div class="card-header">
-          <span class="badge">Rete</span>
-          <span class="version">v2.5</span>
-        </div>
-        <h2>Advanced IP Scanner</h2>
-        <p>Scanner di rete veloce per rilevare tutti i dispositivi connessi in LAN.</p>
-      </div>
-      <a href="https://1drv.ms" target="_blank" rel="noopener" class="download-btn">Scarica da OneDrive</a>
-    </div>
-
-    <!-- Scheda 6 (Protetta da Password) -->
-Usa il codice con cautela.
-🔒 Riservati
-v4.2 VIP
-
-Kit Manutenzione Pro
-Pacchetto privato con script di ottimizzazione e tool diagnostici avanzati.
-
-Sblocca e Scarica
-🔒 Sicurezza
-Archivio
-
-Backup Configurazioni
-File di configurazione personali e profili software protetti da password.
-
-Sblocca e Scarica
-
-Superpeppe Software Hub • Tutti i file sono ospitati su OneDrive
-🔒 Area Protetta
-Inserisci la password per scaricare questo file.
-
-Password errata. Riprova!
-
-Annulla
-Sblocca
-
-
-const PASSWORD_SEGRETA = "peppe2026";
-// Orologio e data live
-function updateClock() {
-const now = new Date();
-document.getElementById('currentDate').textContent = now.toLocaleDateString('it-IT');
-document.getElementById('currentTime').textContent = now.toLocaleTimeString('it-IT');
-}
-setInterval(updateClock, 1000);
-updateClock();
-// Contatore visite
-try {
-let v = parseInt(localStorage.getItem('superpeppe_visits') || '0', 10) + 1;
-localStorage.setItem('superpeppe_visits', v);
-document.getElementById('visitCounter').textContent = v;
-} catch (e) {}
-// Filtri Tab e Ricerca
-const filterBtns = document.querySelectorAll('.filter-btn');
-const cards = document.querySelectorAll('.card');
-const searchInput = document.getElementById('searchInput');
-let activeCat = 'Tutti';
-function filterGrid() {
-const q = searchInput.value.toLowerCase();
-cards.forEach(card => {
-const cat = card.getAttribute('data-category');
-const text = card.textContent.toLowerCase();
-const show = (activeCat === 'Tutti' || cat === activeCat) && text.includes(q);
-card.style.display = show ? 'flex' : 'none';
-});
-}
-filterBtns.forEach(btn => {
-btn.addEventListener('click', () => {
-filterBtns.forEach(b => b.classList.remove('active'));
-btn.classList.add('active');
-activeCat = btn.getAttribute('data-cat');
-filterGrid();
-});
-});
-searchInput.addEventListener('input', filterGrid);
-// Gestione Password sui file protetti
-const modal = document.getElementById('passwordModal');
-const passInput = document.getElementById('passwordInput');
-const passError = document.getElementById('passwordError');
-let targetUrl = '';
-let unlocked = false;
-document.querySelectorAll('.card[data-locked="true"] .download-btn').forEach(btn => {
-btn.addEventListener('click', (e) => {
-if (!unlocked) {
-e.preventDefault();
-targetUrl = btn.getAttribute('href');
-passInput.value = '';
-passError.style.display = 'none';
-modal.classList.add('open');
-passInput.focus();
-}
-});
-});
-function verifyPassword() {
-if (passInput.value === PASSWORD_SEGRETA) {
-unlocked = true;
-modal.classList.remove('open');
-document.querySelectorAll('.btn-locked').forEach(b => {
-b.classList.remove('btn-locked');
-b.textContent = 'Scarica da OneDrive';
-});
-if (targetUrl) window.open(targetUrl, '_blank', 'noopener');
-} else {
-passError.style.display = 'block';
-passInput.focus();
-}
-}
-document.getElementById('cancelModal').addEventListener('click', () => modal.classList.remove('open'));
-document.getElementById('confirmPassword').addEventListener('click', verifyPassword);
-passInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') verifyPassword(); });
-
-### Come procedere su GitHub:
-1. Incolla il codice nel riquadro **Modifica** di `index.html`.
-2. Clicca sul tasto verde in alto a destra **"Conferma le modifiche..."** (*Commit changes*) e conferma nella finestra che si apre.
-3. Apri il link pubblico del tuo sito su GitHub Pages (oppure scarica `index.html` e aprilo sul browser): vedrai la data/ora scorrere in tempo reale, i tab filtrare istantaneamente e il lucchetto chiedere `peppe2026`!
-
-<FollowUp>
-Dopo aver cliccato su **"Conferma le modifiche..."**, se non sai dove trovare il link pubblico del tuo sito su GitHub Pages, chiedi pure e ti guido in 2 passaggi!
-</FollowUp>

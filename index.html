@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Superpeppe - Software Hub</title>
+  <title>Superpeppe - Software &amp; Family Hub</title>
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 50%, #fdf2f8 100%);
@@ -80,7 +80,7 @@
 
     .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .filter-btn {
-      padding: 0.65rem 1.1rem; border-radius: 11px; border: 1px solid var(--border);
+      padding: 0.65rem 1.05rem; border-radius: 11px; border: 1px solid var(--border);
       background: var(--card); color: var(--muted); cursor: pointer; font-weight: 700;
       font-size: 0.88rem; transition: all 0.2s; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
     }
@@ -88,6 +88,13 @@
     .filter-btn.active {
       background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff;
       border-color: transparent; box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+    }
+    .filter-btn.tab-media {
+      border-color: #fbcfe8; color: #be185d; background: #fdf2f8;
+    }
+    .filter-btn.tab-media.active {
+      background: linear-gradient(135deg, #db2777, #e11d48); color: #fff;
+      border-color: transparent; box-shadow: 0 6px 15px rgba(219, 39, 119, 0.3);
     }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.6rem; }
@@ -116,9 +123,13 @@
     .card[data-category="Rete"] .badge { background: #d1fae5; color: #047857; }
     .card[data-category="Rete"] .download-btn { background: linear-gradient(135deg, #059669, #10b981); }
 
+    .card[data-category="Foto & Video"] { border-top-color: #e11d48; }
+    .card[data-category="Foto & Video"] .badge { background: #ffe4e6; color: #be123c; }
+
     .card[data-locked="true"] { border-top-color: #f59e0b; }
     .card[data-locked="true"] .badge { background: #fef3c7; color: #b45309; }
     .card[data-locked="true"] .download-btn.btn-locked { background: linear-gradient(135deg, #d97706, #f59e0b); }
+    .card[data-category="Foto & Video"] .download-btn:not(.btn-locked) { background: linear-gradient(135deg, #e11d48, #f43f5e); }
 
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .badge { font-size: 0.76rem; padding: 0.32rem 0.8rem; border-radius: 999px; font-weight: 800; letter-spacing: 0.02em; }
@@ -196,14 +207,14 @@
   <div class="top-bar">
     <div class="status-group">
       <span><span class="live-dot"></span>Data: <strong id="currentDate">18/11/2026</strong></span>
-      <span>Ora: <strong id="currentTime">14:05:00</strong></span>
+      <span>Ora: <strong id="currentTime">15:54:00</strong></span>
     </div>
     <div class="visit-pill">Visite: <span id="visitCounter">1</span></div>
   </div>
 
   <header>
     <h1>Superpeppe</h1>
-    <p>Il mio archivio personale di software, tool e utility su OneDrive</p>
+    <p>Il mio archivio personale di software, utility e ricordi di famiglia</p>
   </header>
 
   <div class="controls">
@@ -212,12 +223,13 @@
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
-      <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
+      <input type="text" id="searchInput" class="search-box" placeholder="Cerca programmi, foto, compleanni, eventi...">
       <button type="button" id="clearSearchBtn" class="clear-search" title="Cancella ricerca">&#10005;</button>
     </div>
 
     <div class="filter-buttons" id="categoryFilters">
       <button class="filter-btn active" data-cat="Tutti">Tutti</button>
+      <button class="filter-btn tab-media" data-cat="Foto &amp; Video">&#128248; Foto &amp; Video</button>
       <button class="filter-btn" data-cat="Utility">Utility</button>
       <button class="filter-btn" data-cat="Sviluppo">Sviluppo</button>
       <button class="filter-btn" data-cat="Multimedia">Multimedia</button>
@@ -228,6 +240,80 @@
   </div>
 
   <div class="grid" id="softwareGrid">
+    <!-- 4 NUOVI PULSANTI FOTO E VIDEO SU TERABOX SOTTO PASSWORD -->
+    <div class="card" data-category="Foto &amp; Video" data-locked="true" data-action="Vedi Foto &amp; Video">
+      <div>
+        <div class="card-header">
+          <span class="badge">&#128274; Foto &amp; Video</span>
+          <span class="version">TeraBox Cloud</span>
+        </div>
+        <h2>Album Famiglia &amp; Varie</h2>
+        <p>Raccolta privata con Varie Family, Giuseppe Varie, Giovanna Varie, Michela e Camera.</p>
+      </div>
+      <div class="download-area">
+        <a href="https://1024terabox.com/s/1P5NfLy67XK7npPZ1agkbow" target="_blank" rel="noopener" class="download-btn btn-locked">&#128273; Sblocca Foto &amp; Video</a>
+        <div class="progress-wrapper">
+          <div class="progress-info"><span class="status-txt">Apertura galleria TeraBox...</span><span class="pct-txt">0%</span></div>
+          <div class="progress-track"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-category="Foto &amp; Video" data-locked="true" data-action="Vedi Foto &amp; Video">
+      <div>
+        <div class="card-header">
+          <span class="badge">&#128274; Foto &amp; Video</span>
+          <span class="version">Eventi Speciali</span>
+        </div>
+        <h2>Compleanni &amp; Cerimonie</h2>
+        <p>Compleanno 88 di Mamma, 18 anni Michela, Matrimonio Caterina, Comunioni Antonia e Brigida.</p>
+      </div>
+      <div class="download-area">
+        <a href="https://1024terabox.com/s/1P5NfLy67XK7npPZ1agkbow" target="_blank" rel="noopener" class="download-btn btn-locked">&#128273; Sblocca Foto &amp; Video</a>
+        <div class="progress-wrapper">
+          <div class="progress-info"><span class="status-txt">Apertura galleria TeraBox...</span><span class="pct-txt">0%</span></div>
+          <div class="progress-track"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-category="Foto &amp; Video" data-locked="true" data-action="Vedi Foto &amp; Video">
+      <div>
+        <div class="card-header">
+          <span class="badge">&#128274; Foto &amp; Video</span>
+          <span class="version">Viaggi &amp; Feste</span>
+        </div>
+        <h2>Viaggi, Estate &amp; Natale</h2>
+        <p>Ricordi di Cina Wuhu 2018, Estate 2021 e 2022, feste di Natale e momenti insieme.</p>
+      </div>
+      <div class="download-area">
+        <a href="https://1024terabox.com/s/1P5NfLy67XK7npPZ1agkbow" target="_blank" rel="noopener" class="download-btn btn-locked">&#128273; Sblocca Foto &amp; Video</a>
+        <div class="progress-wrapper">
+          <div class="progress-info"><span class="status-txt">Apertura galleria TeraBox...</span><span class="pct-txt">0%</span></div>
+          <div class="progress-track"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-category="Foto &amp; Video" data-locked="true" data-action="Vedi Foto &amp; Video">
+      <div>
+        <div class="card-header">
+          <span class="badge">&#128274; Foto &amp; Video</span>
+          <span class="version">Archivio Storico</span>
+        </div>
+        <h2>Foto Antenati &amp; Ritratti</h2>
+        <p>Archivio storico con Foto Antenati, fototessere, immagini scaricate e mix cellulare.</p>
+      </div>
+      <div class="download-area">
+        <a href="https://1024terabox.com/s/1P5NfLy67XK7npPZ1agkbow" target="_blank" rel="noopener" class="download-btn btn-locked">&#128273; Sblocca Foto &amp; Video</a>
+        <div class="progress-wrapper">
+          <div class="progress-info"><span class="status-txt">Apertura galleria TeraBox...</span><span class="pct-txt">0%</span></div>
+          <div class="progress-track"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAMMI E UTILITY -->
     <div class="card" data-category="Utility" data-locked="false">
       <div>
         <div class="card-header">
@@ -356,19 +442,19 @@
 
     <div class="empty-state" id="emptyState">
       <div class="empty-state-icon">&#128269;</div>
-      <h3>Nessun programma trovato</h3>
-      <p id="emptyStateText">Non ci sono software corrispondenti alla tua ricerca.</p>
-      <button type="button" class="reset-btn" id="resetFiltersBtn">Mostra tutti i programmi</button>
+      <h3>Nessun elemento trovato</h3>
+      <p id="emptyStateText">Non ci sono contenuti corrispondenti alla tua ricerca.</p>
+      <button type="button" class="reset-btn" id="resetFiltersBtn">Mostra tutti gli elementi</button>
     </div>
   </div>
 
-  <footer>Superpeppe Software Hub &bull; Tutti i file sono ospitati su OneDrive</footer>
+  <footer>Superpeppe Software &amp; Family Hub &bull; OneDrive &amp; TeraBox Cloud</footer>
 </div>
 
 <div class="modal-overlay" id="passwordModal">
   <div class="modal-box">
-    <h3>&#128274; Area Protetta</h3>
-    <p id="modalDesc">Inserisci la password per sbloccare il download.</p>
+    <h3>&#128274; Area Riservata</h3>
+    <p id="modalDesc">Inserisci la password per accedere a questo contenuto.</p>
     <input type="password" id="passwordInput" class="modal-input" placeholder="Digita la password...">
     <div class="error-msg" id="passwordError">&#9888;&#65039; Password errata! Riprova.</div>
     <div class="modal-actions">
@@ -420,7 +506,7 @@
       emptyState.style.display = 'block';
       emptyStateText.textContent = q
         ? 'Nessun risultato trovato per "' + searchInput.value + '" nella categoria ' + activeCat + '.'
-        : 'Nessun programma disponibile in questa categoria al momento.';
+        : 'Nessun contenuto disponibile in questa categoria al momento.';
     } else {
       emptyState.style.display = 'none';
     }
@@ -464,24 +550,25 @@
     const pctTxt = area.querySelector('.pct-txt');
     const statusTxt = area.querySelector('.status-txt');
     const url = btn.getAttribute('href');
+    const isMedia = btn.closest('.card').getAttribute('data-category') === 'Foto & Video';
 
     if (progWrap.style.display === 'block') return;
 
     progWrap.style.display = 'block';
     let pct = 0;
     fill.style.width = '0%';
-    statusTxt.textContent = 'Preparazione link OneDrive...';
+    statusTxt.textContent = isMedia ? 'Connessione a TeraBox...' : 'Preparazione link OneDrive...';
 
     const timer = setInterval(() => {
-      pct += 20;
+      pct += 25;
       fill.style.width = pct + '%';
       pctTxt.textContent = pct + '%';
 
-      if (pct === 60) statusTxt.textContent = 'Avvio download...';
+      if (pct === 50) statusTxt.textContent = isMedia ? 'Apertura galleria...' : 'Avvio download...';
 
       if (pct >= 100) {
         clearInterval(timer);
-        statusTxt.textContent = 'Download avviato!';
+        statusTxt.textContent = isMedia ? 'Galleria aperta!' : 'Download avviato!';
         window.open(url, '_blank', 'noopener');
         setTimeout(() => {
           progWrap.style.display = 'none';
@@ -494,7 +581,8 @@
   document.querySelectorAll('.download-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const isLocked = btn.closest('.card').getAttribute('data-locked') === 'true';
+      const card = btn.closest('.card');
+      const isLocked = card.getAttribute('data-locked') === 'true';
 
       if (isLocked && !unlocked) {
         pendingBtn = btn;
@@ -514,7 +602,12 @@
       modal.classList.remove('open');
       document.querySelectorAll('.btn-locked').forEach(b => {
         b.classList.remove('btn-locked');
-        b.innerHTML = '&#11015;&#65039; Scarica da OneDrive';
+        const customAction = b.closest('.card').getAttribute('data-action');
+        if (customAction) {
+          b.innerHTML = '&#128248; ' + customAction;
+        } else {
+          b.innerHTML = '&#11015;&#65039; Scarica da OneDrive';
+        }
       });
       if (pendingBtn) startDownloadBar(pendingBtn);
     } else {

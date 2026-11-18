@@ -1,367 +1,161 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Superpeppe - Archivio Software e Programmi su OneDrive</title>
-    <meta name="description" content="Superpeppe: raccolta personale e download diretto dei migliori programmi, utility e software di sviluppo da OneDrive.">
-    <style>
-        :root {
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --card-hover: #f8fafc;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --locked: #d97706;
-            --locked-hover: #b45309;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 1.5rem 1rem 3rem;
-        }
-
-        .container {
-            max-width: 1150px;
-            margin: 0 auto;
-        }
-
-        .top-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 0.65rem 1.25rem;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            gap: 1rem;
-        }
-
-        .top-bar strong {
-            color: var(--text-main);
-        }
-
-        .status-group {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 2.2rem;
-        }
-
-        header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #1d4ed8, #0ea5e9);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.4rem;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        /* Layout fluido come il primo modello: ricerca + tab affiancati */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 260px;
-            padding: 0.75rem 1.2rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background-color: var(--card-bg);
-            color: var(--text-main);
-            font-size: 0.95rem;
-            box-shadow: var(--shadow);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-box:focus {
-            border-color: var(--primary);
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.65rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background-color: var(--card-bg);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: var(--shadow);
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            background-color: #e2e8f0;
-            color: var(--text-main);
-        }
-
-        .filter-btn.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            background-color: var(--card-hover);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .badge {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.65rem;
-            border-radius: 999px;
-            background-color: #eff6ff;
-            color: var(--primary);
-            font-weight: 700;
-            border: 1px solid #bfdbfe;
-        }
-
-        .badge.locked-badge {
-            background-color: #fef3c7;
-            color: var(--locked);
-            border-color: #fde68a;
-        }
-
-        .version {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .card h2 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-        }
-
-        .download-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 0.75rem;
-            background-color: var(--primary);
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .download-btn:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .download-btn.btn-locked {
-            background-color: var(--locked);
-        }
-
-        .download-btn.btn-locked:hover {
-            background-color: var(--locked-hover);
-        }
-
-        /* Finestra Password */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(3px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 1rem;
-        }
-
-        .modal-overlay.open {
-            display: flex;
-        }
-
-        .modal-box {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 14px;
-            max-width: 380px;
-            width: 100%;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
-            text-align: center;
-        }
-
-        .modal-box h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.25rem;
-        }
-
-        .modal-box p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-            outline: none;
-        }
-
-        .modal-input:focus {
-            border-color: var(--primary);
-        }
-
-        .error-msg {
-            color: #dc2626;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            padding: 0.7rem;
-            border: 1px solid var(--border);
-            background: #f8fafc;
-            color: var(--text-main);
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-confirm {
-            flex: 1;
-            padding: 0.7rem;
-            border: none;
-            background: var(--primary);
-            color: white;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 4rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superpeppe - Software Hub</title>
+<style>
+:root { --bg: #f1f5f9; --card: #ffffff; --primary: #2563eb; --primary-h: #1d4ed8; --lock: #d97706; --lock-h: #b45309; --text: #0f172a; --muted: #64748b; --border: #e2e8f0; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); padding: 1.5rem 1rem 3rem; }
+.container { max-width: 1150px; margin: 0 auto; }
+.top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: var(--card); padding: 0.7rem 1.2rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 2rem; font-size: 0.9rem; color: var(--muted); gap: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+.top-bar strong { color: var(--text); }
+.status-group { display: flex; gap: 1.2rem; }
+header { text-align: center; margin-bottom: 2rem; }
+header h1 { font-size: 2.8rem; font-weight: 800; color: var(--primary); margin-bottom: 0.4rem; }
+header p { color: var(--muted); font-size: 1.1rem; }
+.controls { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.search-box { flex: 1; min-width: 250px; padding: 0.75rem 1.2rem; border-radius: 8px; border: 1px solid var(--border); background: var(--card); font-size: 0.95rem; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+.search-box:focus { border-color: var(--primary); }
+.filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filter-btn { padding: 0.65rem 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+.filter-btn:hover { background: #e2e8f0; color: var(--text); }
+.filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
+.card:hover { transform: translateY(-4px); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.badge { font-size: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 999px; background: #eff6ff; color: var(--primary); font-weight: 700; border: 1px solid #bfdbfe; }
+.badge.locked-badge { background: #fef3c7; color: var(--lock); border-color: #fde68a; }
+.version { font-size: 0.85rem; color: var(--muted); }
+.card h2 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+.card p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; }
+.download-btn { display: block; width: 100%; text-align: center; padding: 0.75rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+.download-btn:hover { background: var(--primary-h); }
+.download-btn.btn-locked { background: var(--lock); }
+.download-btn.btn-locked:hover { background: var(--lock-h); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: var(--card); padding: 2rem; border-radius: 14px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 25px rgba(0,0,0,0.15); }
+.modal-box h3 { margin-bottom: 0.5rem; }
+.modal-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
+.modal-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 0.75rem; }
+.error-msg { color: #dc2626; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+.modal-actions { display: flex; gap: 0.75rem; }
+.btn-cancel { flex: 1; padding: 0.7rem; border: 1px solid var(--border); background: #f8fafc; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.btn-confirm { flex: 1; padding: 0.7rem; border: none; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 600; cursor: pointer; }
+footer { text-align: center; margin-top: 4rem; color: var(--muted); font-size: 0.9rem; }
+</style>
 </head>
 <body>
-
 <div class="container">
-    <div class="top-bar">
-        <div class="status-group">
-            <span>📅 <strong id="currentDate">--/--/----</strong></span>
-            <span>🕒 <strong id="currentTime">--:--:--</strong></span>
-        </div>
-        <div>
-            👁️ Visite: <strong id="visitCounter">1</strong>
-        </div>
+  <div class="top-bar">
+    <div class="status-group">
+      <span>Data: <strong id="currentDate">18/11/2026</strong></span>
+      <span>Ora: <strong id="currentTime">13:45:00</strong></span>
     </div>
-
-    <header>
-        <h1>Superpeppe</h1>
-        <p>Il mio archivio personale di software e utility su OneDrive</p>
-    </header>
-
-    <div class="controls">
-        <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
-        <div class="filter-buttons" id="categoryFilters"></div>
-    </div>
-
-    <div class="grid" id="softwareGrid"></div>
-
-    <footer>
-        Superpeppe Software Hub &bull; Tutti i file sono ospitati su OneDrive
-    </footer>
+    <div>Visite: <strong id="visitCounter">1</strong></div>
+  </div>
+  <header>
+    <h1>Superpeppe</h1>
+    <p>Il mio archivio personale di software e utility su OneDrive</p>
+  </header>
+  <div class="controls">
+    <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
+    <div class="filter-buttons" id="categoryFilters"></div>
+  </div>
+  <div class="grid" id="softwareGrid"></div>
+  <footer>Superpeppe Software Hub &bull; Tutti i file sono ospitati su OneDrive</footer>
 </div>
 
 <div class="modal-overlay" id="passwordModal">
-    <div class="modal-box">
-        <h3>🔒 Area Protetta</h3>
-        <p id="modalDesc">Inserisci la password per scaricare questo file.</p>
-        <input type="password" id="passwordInput" class="modal-input" placeholder="Password...">
-        <div class="error-msg" id="passwordError">Password errata. Riprova!</div>
-        <div class="modal-actions">
+  <div class="modal-box">
+    <h3>Area Protetta</h3>
+    <p id="modalDesc">Inserisci la password per scaricare questo file.</p>
+    <input type="password" id="passwordInput" class="modal-input" placeholder="Password...">
+    <div class="error-msg" id="passwordError">Password errata. Riprova!</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelModal">Annulla</button>
+      <button class="btn-confirm" id="confirmPassword">Sblocca</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  var PASSWORD_SEGRETA = "peppe2026";
+  var programmi = [
+    { nome: "7-Zip Portable", categoria: "Utility", versione: "v24.08 x64", descrizione: "Gestore di archivi compressi leggero e veloce, versione senza installazione.", linkOneDrive: "https://1drv.ms", protetto: false },
+    { nome: "Notepad++ Custom", categoria: "Sviluppo", versione: "v8.7", descrizione: "Editor di testo e codice sorgente con i miei plugin gia configurati.", linkOneDrive: "https://1drv.ms", protetto: false },
+    { nome: "VLC Media Player", categoria: "Multimedia", versione: "v3.0.21", descrizione: "Lettore multimediale universale per qualsiasi formato audio e video.", linkOneDrive: "https://1drv.ms", protetto: false },
+    { nome: "Sysinternals Suite", categoria: "Utility", versione: "Edition", descrizione: "Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.", linkOneDrive: "https://1drv.ms", protetto: false },
+    { nome: "Advanced IP Scanner", categoria: "Rete", versione: "v2.5", descrizione: "Scanner di rete veloce per rilevare tutti i dispositivi connessi in LAN.", linkOneDrive: "https://1drv.ms", protetto: false },
+    { nome: "Kit Manutenzione Pro", categoria: "Riservati", versione: "v4.2 VIP", descrizione: "Pacchetto privato con script di ottimizzazione e tool diagnostici avanzati.", linkOneDrive: "https://1drv.ms", protetto: true },
+    { nome: "Backup Configurazioni", categoria: "Sicurezza", versione: "Archivio", descrizione: "File di configurazione personali e profili software protetti da password.", linkOneDrive: "https://1drv.ms", protetto: true }
+  ];
+
+  function updateDateTime() {
+    var now = new Date();
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('it-IT');
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString('it-IT');
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  try {
+    var visits = localStorage.getItem('superpeppe_visits');
+    visits = visits ? parseInt(visits, 10) + 1 : 1;
+    localStorage.setItem('superpeppe_visits', visits);
+    document.getElementById('visitCounter').textContent = visits;
+  } catch (e) {}
+
+  var grid = document.getElementById('softwareGrid');
+  var searchInput = document.getElementById('searchInput');
+  var filtersContainer = document.getElementById('categoryFilters');
+  var currentCategory = 'Tutti';
+  var pendingDownloadUrl = null;
+  var isUnlockedSession = false;
+
+  function renderFilters() {
+    var cats = ['Tutti'];
+    for (var i = 0; i < programmi.length; i++) {
+      if (cats.indexOf(programmi[i].categoria) === -1) {
+        cats.push(programmi[i].categoria);
+      }
+    }
+    filtersContainer.innerHTML = '';
+    for (var j = 0; j < cats.length; j++) {
+      (function(cat) {
+        var btn = document.createElement('button');
+        btn.className = 'filter-btn' + (cat === currentCategory ? ' active' : '');
+        var hasProtected = programmi.some(function(p) { return p.categoria === cat && p.protetto; });
+        btn.textContent = (hasProtected ? '[Protetto] ' : '') + cat;
+        btn.onclick = function() {
+          currentCategory = cat;
+          renderFilters();
+          renderCards();
+        };
+        filtersContainer.appendChild(btn);
+      })(cats[j]);
+    }
+  }
+
+  function renderCards() {
+    var query = searchInput.value.toLowerCase();
+    grid.innerHTML = '';
+    var filtered = programmi.filter(function(prog) {
+      var matchCat = currentCategory === 'Tutti' || prog.categoria === currentCategory;
+      var matchSearch = prog.nome.toLowerCase().indexOf(query) !== -1 || prog.descrizione.toLowerCase().indexOf(query) !== -1;
+      return matchCat && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<p style="color:#64748b;grid-column:1/-1;text-align:center;">Nessun programma trovato.</p>';
+      return;
+    }
+
+    for (var i = 0; i < filtered.length; i++) {
+      (function(prog) {
+        var card = document.createElement('div');
+        card.className = 'card';

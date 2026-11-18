@@ -5,24 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Superpeppe - Archivio Software e Programmi su OneDrive</title>
     <meta name="description" content="Superpeppe: raccolta personale e download diretto dei migliori programmi, utility e software di sviluppo da OneDrive.">
-    <meta name="keywords" content="Superpeppe, download programmi, utility, software hub, OneDrive">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Anteprima per condivisione su WhatsApp, Teams e Social -->
-    <meta property="og:title" content="Superpeppe - Software Hub">
-    <meta property="og:description" content="Scarica rapidamente tutti i programmi e le utility selezionate da Superpeppe.">
-    <meta property="og:type" content="website">
-
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --card-hover: #283548;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --locked: #d97706;
+            --locked-hover: #b45309;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -36,12 +31,39 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem 3rem;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
+        }
+
+        /* Top Bar: Data, Ora e Visite */
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            gap: 1rem;
+        }
+
+        .top-bar strong {
+            color: var(--text-main);
+        }
+
+        .status-group {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
         }
 
         header {
@@ -52,10 +74,11 @@
         header h1 {
             font-size: 2.8rem;
             font-weight: 800;
-            background: linear-gradient(90deg, #60a5fa, #38bdf8);
+            background: linear-gradient(90deg, #1d4ed8, #0ea5e9);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         header p {
@@ -63,73 +86,88 @@
             font-size: 1.1rem;
         }
 
+        /* Controlli e Tab */
         .controls {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 1.25rem;
             margin-bottom: 2rem;
         }
 
         .search-box {
-            flex: 1;
-            min-width: 260px;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
+            width: 100%;
+            padding: 0.9rem 1.25rem;
+            border-radius: 10px;
             border: 1px solid var(--border);
             background-color: var(--card-bg);
             color: var(--text-main);
             font-size: 1rem;
+            box-shadow: var(--shadow);
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .search-box:focus {
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
-        .filter-buttons {
+        .tabs-container {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.6rem;
             flex-wrap: wrap;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
         }
 
-        .filter-btn {
-            padding: 0.6rem 1.2rem;
+        .tab-btn {
+            padding: 0.6rem 1.1rem;
             border-radius: 8px;
-            border: 1px solid var(--border);
-            background-color: var(--card-bg);
+            border: 1px solid transparent;
+            background-color: transparent;
             color: var(--text-muted);
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.95rem;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
-        .filter-btn.active, .filter-btn:hover {
+        .tab-btn:hover {
+            background-color: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
             background-color: var(--primary);
             color: white;
-            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25);
         }
 
+        /* Griglia Schede */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 1.5rem;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .card:hover {
             transform: translateY(-4px);
-            background-color: var(--card-hover);
+            box-shadow: var(--shadow-hover);
         }
 
         .card-header {
@@ -141,45 +179,153 @@
 
         .badge {
             font-size: 0.75rem;
-            padding: 0.25rem 0.6rem;
+            padding: 0.25rem 0.7rem;
             border-radius: 999px;
-            background-color: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-            font-weight: 600;
+            background-color: #eff6ff;
+            color: var(--primary);
+            font-weight: 700;
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge.locked-badge {
+            background-color: #fef3c7;
+            color: var(--locked);
+            border-color: #fde68a;
         }
 
         .version {
             font-size: 0.85rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
         .card h2 {
             font-size: 1.25rem;
             margin-bottom: 0.5rem;
+            color: var(--text-main);
         }
 
         .card p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.55;
             margin-bottom: 1.5rem;
         }
 
         .download-btn {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
             width: 100%;
-            text-align: center;
-            padding: 0.75rem;
+            padding: 0.8rem;
             background-color: var(--primary);
             color: white;
             text-decoration: none;
-            border-radius: 8px;
+            border: none;
+            border-radius: 9px;
             font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
             transition: background-color 0.2s;
         }
 
         .download-btn:hover {
             background-color: var(--primary-hover);
+        }
+
+        .download-btn.btn-locked {
+            background-color: var(--locked);
+        }
+
+        .download-btn.btn-locked:hover {
+            background-color: var(--locked-hover);
+        }
+
+        /* Modale Password */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .modal-box h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .modal-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            outline: none;
+        }
+
+        .modal-input:focus {
+            border-color: var(--primary);
+        }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            color: var(--text-main);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-confirm {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         footer {
@@ -193,119 +339,233 @@
 <body>
 
 <div class="container">
+    <!-- Barra superiore con Data, Ora e Contatore -->
+    <div class="top-bar">
+        <div class="status-group">
+            <span>📅 <strong id="currentDate">--/--/----</strong></span>
+            <span>🕒 <strong id="currentTime">--:--:--</strong></span>
+        </div>
+        <div>
+            👁️ Visite pagina: <strong id="visitCounter">1</strong>
+        </div>
+    </div>
+
     <header>
         <h1>Superpeppe</h1>
-        <p>Il mio archivio personale di software e utility su OneDrive</p>
+        <p>Il mio archivio personale di software, tool e utility su OneDrive</p>
     </header>
 
     <div class="controls">
-        <input type="text" id="searchInput" class="search-box" placeholder="Cerca un programma per nome o descrizione...">
-        <div class="filter-buttons" id="categoryFilters">
-            <button class="filter-btn active" data-category="Tutti">Tutti</button>
-            <button class="filter-btn" data-category="Sviluppo">Sviluppo</button>
-            <button class="filter-btn" data-category="Utility">Utility</button>
-            <button class="filter-btn" data-category="Multimedia">Multimedia</button>
-        </div>
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cerca un programma per nome, categoria o descrizione...">
+        <div class="tabs-container" id="categoryTabs"></div>
     </div>
 
     <div class="grid" id="softwareGrid"></div>
 
     <footer>
-        Superpeppe Software Hub &bull; Tutti i file sono ospitati su OneDrive
-    </footer>
-</div>
+Usa il codice con cautela.
+Superpeppe Software Hub • Tutti i file sono ospitati in sicurezza su OneDrive
 
-<script>
-    // =========================================================================
-    // I TUOI PROGRAMMI SU ONEDRIVE
-    // Sostituisci i link di esempio con quelli generati dal tuo OneDrive
-    // (Assicurati che su OneDrive siano impostati su "Chiunque abbia il link")
-    // =========================================================================
-    const programmi = [
-        {
-            nome: "PROGRAMMI DOWNLOAD",
-            categoria: "Utility",
-            versione: "v24.08 x64",
-            descrizione: "Gestore di archivi compressi leggero e veloce, versione senza installazione.",
-            linkOneDrive: "https://1drv.ms"
-        },
-        {
-            nome: "Notepad++ Custom",
-            categoria: "Sviluppo",
-            versione: "v8.7",
-            descrizione: "Editor di testo e codice sorgente con i miei plugin già configurati.",
-            linkOneDrive: "https://1drv.ms"
-        },
-        {
-            nome: "VLC Media Player",
-            categoria: "Multimedia",
-            versione: "v3.0.21",
-            descrizione: "Lettore multimediale universale per qualsiasi formato audio e video.",
-            linkOneDrive: "https://1drv.ms"
-        },
-        {
-            nome: "Sysinternals Suite",
-            categoria: "Utility",
-            versione: "Edition",
-            descrizione: "Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.",
-            linkOneDrive: "https://1drv.ms"
-        }
-    ];
+🔒 Area Protetta
+Inserisci la password per sbloccare il download di questo file.
 
-    const grid = document.getElementById('softwareGrid');
-    const searchInput = document.getElementById('searchInput');
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    let currentCategory = 'Tutti';
+Password errata. Riprova!
 
-    function renderCards() {
-        const query = searchInput.value.toLowerCase();
-        grid.innerHTML = '';
+Annulla
+Sblocca
 
-        const filtered = programmi.filter(prog => {
-            const matchesCategory = currentCategory === 'Tutti' || prog.categoria === currentCategory;
-            const matchesSearch = prog.nome.toLowerCase().includes(query) || 
-                                  prog.descrizione.toLowerCase().includes(query);
-            return matchesCategory && matchesSearch;
-        });
 
-        if (filtered.length === 0) {
-            grid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">Nessun programma trovato.</p>';
-            return;
-        }
+// =========================================================================
+// CONFIGURAZIONE GENERALE
+// =========================================================================
+const PASSWORD_SEGRETA = "peppe2026"; // <-- Cambia qui la password per i file protetti
+// =========================================================================
+// LISTA PROGRAMMI (Aggiungi "protetto: true" ai file da bloccare con password)
+// =========================================================================
+const programmi = [
+{
+nome: "7-Zip Portable",
+categoria: "Utility",
+versione: "v24.08 x64",
+descrizione: "Gestore di archivi compressi leggero e veloce, versione senza installazione.",
+linkOneDrive: "https://1drv.ms",
+protetto: false
+},
+{
+nome: "Notepad++ Custom",
+categoria: "Sviluppo",
+versione: "v8.7",
+descrizione: "Editor di testo e codice sorgente con i miei plugin già configurati.",
+linkOneDrive: "https://1drv.ms",
+protetto: false
+},
+{
+nome: "VLC Media Player",
+categoria: "Multimedia",
+versione: "v3.0.21",
+descrizione: "Lettore multimediale universale per qualsiasi formato audio e video.",
+linkOneDrive: "https://1drv.ms",
+protetto: false
+},
+{
+nome: "Sysinternals Suite",
+categoria: "Utility",
+versione: "2026 Edition",
+descrizione: "Raccolta completa di strumenti Microsoft per diagnostica e amministrazione Windows.",
+linkOneDrive: "https://1drv.ms",
+protetto: false
+},
+{
+nome: "Advanced IP Scanner",
+categoria: "Rete",
+versione: "v2.5",
+descrizione: "Scanner di rete veloce per rilevare tutti i dispositivi connessi in LAN.",
+linkOneDrive: "https://1drv.ms",
+protetto: false
+},
+{
+nome: "Kit Manutenzione Pro",
+categoria: "Riservati",
+versione: "v4.2 VIP",
+descrizione: "Pacchetto privato con script di ottimizzazione, chiavi e tool diagnostici avanzati.",
+linkOneDrive: "https://1drv.ms",
+protetto: true
+},
+{
+nome: "Backup Configurazioni",
+categoria: "Sicurezza",
+versione: "Archivio",
+descrizione: "File di configurazione personali e profili software protetti da password.",
+linkOneDrive: "https://1drv.ms",
+protetto: true
+}
+];
+// =========================================================================
+// 1. OROLOGIO E DATA IN TEMPO REALE
+// =========================================================================
+function updateDateTime() {
+const now = new Date();
+const opzioniData = { weekday: 'short', day: '2-digit', month: 'long', year: 'numeric' };
+document.getElementById('currentDate').textContent = now.toLocaleDateString('it-IT', opzioniData);
+document.getElementById('currentTime').textContent = now.toLocaleTimeString('it-IT');
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+// =========================================================================
+// 2. CONTATORE VISITE (Salvataggio nel browser)
+// =========================================================================
+function updateVisitCounter() {
+let visits = localStorage.getItem('superpeppe_visits');
+visits = visits ? parseInt(visits) + 1 : 1;
+localStorage.setItem('superpeppe_visits', visits);
+document.getElementById('visitCounter').textContent = visits;
+}
+updateVisitCounter();
+// =========================================================================
+// 3. GENERAZIONE AUTOMATICA DEI TAB E RENDERING SCHEDE
+// =========================================================================
+const grid = document.getElementById('softwareGrid');
+const searchInput = document.getElementById('searchInput');
+const tabsContainer = document.getElementById('categoryTabs');
+let currentCategory = 'Tutti';
+let pendingDownloadUrl = null;
+let isUnlockedSession = false; // Se sblocchi un file, restano sbloccati finché non chiudi la pagina
+function renderTabs() {
+const categories = ['Tutti', ...new Set(programmi.map(p => p.categoria))];
+tabsContainer.innerHTML = '';
+categories.forEach(cat => {
+const btn = document.createElement('button');
+btn.className = tab-btn ${cat === currentCategory ? 'active' : ''};
+const hasProtected = programmi.some(p => p.categoria === cat && p.protetto);
+btn.innerHTML = ${hasProtected ? '🔒 ' : ''}${cat};
+btn.addEventListener('click', () => {
+currentCategory = cat;
+renderTabs();
+renderCards();
+});
+tabsContainer.appendChild(btn);
+});
+}
+function renderCards() {
+const query = searchInput.value.toLowerCase();
+grid.innerHTML = '';
+const filtered = programmi.filter(prog => {
+const matchesCategory = currentCategory === 'Tutti' || prog.categoria === currentCategory;
+const matchesSearch = prog.nome.toLowerCase().includes(query) ||
+prog.descrizione.toLowerCase().includes(query) ||
+prog.categoria.toLowerCase().includes(query);
+return matchesCategory && matchesSearch;
+});
+if (filtered.length === 0) {
+grid.innerHTML = 'Nessun programma trovato per questa ricerca.';
+return;
+}
+filtered.forEach(prog => {
+const card = document.createElement('div');
+card.className = 'card';
+const isLocked = prog.protetto && !isUnlockedSession;
+card.innerHTML = <div> <div class="card-header"> <span class="badge ${prog.protetto ? 'locked-badge' : ''}"> ${prog.protetto ? '🔒 ' : ''}${prog.categoria} </span> <span class="version">${prog.versione}</span> </div> <h2>${prog.nome}</h2> <p>${prog.descrizione}</p> </div> <button class="download-btn ${isLocked ? 'btn-locked' : ''}"> ${isLocked ? '🔑 Sblocca e Scarica' : '⬇️ Scarica da OneDrive'} </button>;
+const btn = card.querySelector('.download-btn');
+btn.addEventListener('click', () => {
+if (isLocked) {
+openPasswordModal(prog.linkOneDrive, prog.nome);
+} else {
+window.open(prog.linkOneDrive, '_blank', 'noopener,noreferrer');
+}
+});
+grid.appendChild(card);
+});
+}
+// =========================================================================
+// 4. GESTIONE FINESTRA PASSWORD
+// =========================================================================
+const modal = document.getElementById('passwordModal');
+const passwordInput = document.getElementById('passwordInput');
+const passwordError = document.getElementById('passwordError');
+const modalDesc = document.getElementById('modalDesc');
+function openPasswordModal(url, nomeProg) {
+pendingDownloadUrl = url;
+modalDesc.textContent = Inserisci la password per scaricare "${nomeProg}".;
+passwordInput.value = '';
+passwordError.style.display = 'none';
+modal.classList.add('open');
+setTimeout(() => passwordInput.focus(), 100);
+}
+function closePasswordModal() {
+modal.classList.remove('open');
+pendingDownloadUrl = null;
+}
+function checkPassword() {
+if (passwordInput.value === PASSWORD_SEGRETA) {
+isUnlockedSession = true;
+const urlToOpen = pendingDownloadUrl;
+closePasswordModal();
+renderCards(); // Aggiorna i pulsanti da arancioni a blu
+if (urlToOpen) {
+window.open(urlToOpen, '_blank', 'noopener,noreferrer');
+}
+} else {
+passwordError.style.display = 'block';
+passwordInput.focus();
+}
+}
+document.getElementById('cancelModal').addEventListener('click', closePasswordModal);
+document.getElementById('confirmPassword').addEventListener('click', checkPassword);
+passwordInput.addEventListener('keypress', (e) => {
+if (e.key === 'Enter') checkPassword();
+});
+searchInput.addEventListener('input', renderCards);
+// Avvio iniziale
+renderTabs();
+renderCards();
 
-        filtered.forEach(prog => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div>
-                    <div class="card-header">
-                        <span class="badge">${prog.categoria}</span>
-                        <span class="version">${prog.versione}</span>
-                    </div>
-                    <h2>${prog.nome}</h2>
-                    <p>${prog.descrizione}</p>
-                </div>
-                <a href="${prog.linkOneDrive}" target="_blank" rel="noopener noreferrer" class="download-btn">
-                    Scarica da OneDrive
-                </a>
-            `;
-            grid.appendChild(card);
-        });
-    }
+### Due note importanti da sapere:
+1. **Password lato client:** In una pagina puramente HTML/JavaScript (senza un server dietro), la password (`peppe2026`) è scritta nel codice sorgente. È perfetta per tenere lontani i curiosi, ma **ricorda di impostare la password anche direttamente su OneDrive** quando condividi quei file riservati, così i link sono protetti al 100% anche se qualcuno ispeziona il codice della pagina.
+2. **Contatore visite:** Attualmente usa `localStorage`, quindi conta le visite fatte dal tuo dispositivo/browser. Se pubblichi il sito online e vuoi un contatore reale che sommi le visite di *tutti* gli utenti del mondo, possiamo collegarlo in 2 minuti a un servizio gratuito come *CountAPI* o *Counter.dev*.
 
-    searchInput.addEventListener('input', renderCards);
-
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentCategory = btn.getAttribute('data-category');
-            renderCards();
-        });
-    });
-
-    renderCards();
-</script>
-
-</body>
-</html>
+<FollowUp>
+Vuoi personalizzare ulteriormente questa versione? Possiamo:
+* Collegare un **contatore visite globale** (che conta tutti i visitatori reali quando metti il sito online)
+* Aggiungere **password diverse per ogni singola categoria** invece di una password unica
+* Modificare i **colori o le categorie** dei tab
+</FollowUp>

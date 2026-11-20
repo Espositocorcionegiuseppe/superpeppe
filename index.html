@@ -2,57 +2,86 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Monitor Obbligazioni Live</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitor Obbligazioni, BOT e Titoli Esteri</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; color: #333; max-width: 1000px; margin-inline: auto; }
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-h1 { color: #1a365d; margin: 0; font-size: 1.4rem; }
-button { background: #1a365d; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.btn-add { background: #15803d; }
-.btn-del { background: #dc2626; padding: 5px 10px; font-size: 0.8rem; }
-.box { background: #fff; padding: 15px; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
-.add-bar { display: flex; gap: 10px; flex-wrap: wrap; }
-select, input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-input { flex: 1; }
-table { width: 100%; border-collapse: collapse; background: #fff; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-th { background: #1a365d; color: #fff; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f4f6f9; color: #333; max-width: 1100px; margin-inline: auto; }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+  h1 { color: #1a365d; margin: 0; font-size: 1.5rem; }
+  h2 { color: #1a365d; margin: 0 0 10px 0; font-size: 1.1rem; }
+  button { background: #1a365d; color: #fff; border: none; padding: 10px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+  button:hover { background: #2b4c7e; }
+  .btn-reset { background: #64748b; margin-right: 8px; }
+  .btn-reset:hover { background: #475569; }
+  .btn-add { background: #15803d; }
+  .btn-add:hover { background: #166534; }
+  .btn-del { background: #dc2626; padding: 5px 10px; font-size: 0.8rem; }
+  .btn-del:hover { background: #b91c1c; }
+  .box { background: #fff; padding: 15px; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); }
+  .top-box { border-left: 5px solid #15803d; }
+  .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .top-card { background: #f8fafc; padding: 12px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.92rem; }
+  .add-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  select, input { padding: 9px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95rem; }
+  input { flex: 1; min-width: 160px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+  th { background: #1a365d; color: #fff; font-size: 0.85rem; text-transform: uppercase; }
+  tr:hover { background: #f8fafc; }
+  .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+  .bot { background: #e2e8f0; color: #1e293b; }
+  .btp { background: #dcfce7; color: #166534; }
+  .estero { background: #dbeafe; color: #1e40af; }
+  .status { color: #15803d; font-weight: bold; margin-bottom: 15px; font-size: 0.95rem; }
+  a.titolo-link { color: #1a365d; font-weight: bold; text-decoration: none; }
+  a.titolo-link:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 
 <div class="header">
-<h1>Monitor Obbligazioni, BOT e Titoli Esteri</h1>
-<button id="btn-aggiorna">Aggiorna Quotazioni</button>
+  <h1>Monitor Obbligazioni, BOT e Titoli Esteri</h1>
+  <div>
+    <button class="btn-reset" id="btn-reset">Ripristina Lista Base</button>
+    <button id="btn-aggiorna">Aggiorna Quotazioni</button>
+  </div>
 </div>
 
-<div id="stato" style="color:#15803d; font-weight:bold; margin-bottom:15px;">Avvio sistema...</div>
+<div class="status" id="stato">Avvio sistema...</div>
+
+<div class="box top-box">
+  <h2>In Evidenza (Titoli sotto la pari / Prezzo più basso nella tua lista)</h2>
+  <div class="top-grid" id="box-evidenza">
+    <div class="top-card">Caricamento quotazioni in corso...</div>
+  </div>
+</div>
 
 <div class="box add-bar">
-<select id="tipo">
-<option value="BOT">BOT</option>
-<option value="BTP">BTP</option>
-<option value="Estero">Estero</option>
-</select>
-<input type="text" id="nome" placeholder="Nome (es. BTP 2034)">
-<input type="text" id="isin" placeholder="Codice ISIN (12 caratteri)" maxlength="12">
-<button class="btn-add" id="btn-aggiungi">+ Aggiungi</button>
+  <select id="tipo">
+    <option value="BOT">BOT</option>
+    <option value="BTP">BTP</option>
+    <option value="Estero">Estero</option>
+  </select>
+  <input type="text" id="nome" placeholder="Nome titolo (es. BTP 2034 o Bund)">
+  <input type="text" id="isin" placeholder="Codice ISIN (12 caratteri)" maxlength="12">
+  <button class="btn-add" id="btn-aggiungi">+ Aggiungi ISIN</button>
 </div>
 
-<div class="box">
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Titolo</th>
-<th>ISIN</th>
-<th>Ultimo Prezzo</th>
-<th>Rendimento Netto</th>
-<th>Azioni</th>
-</tr>
-</thead>
-<tbody id="tabella"></tbody>
-</table>
+<div class="box" style="padding:0; overflow-x:auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Titolo</th>
+        <th>ISIN</th>
+        <th>Ultimo Prezzo</th>
+        <th>Variazione Giorno</th>
+        <th>Scheda Ufficiale</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody id="tabella"></tbody>
+  </table>
 </div>
 
 <script>
@@ -60,61 +89,99 @@ const defaultData = [
   { tipo: "BOT", nome: "BOT ZC Ott 2027", isin: "IT0005600001" },
   { tipo: "BTP", nome: "BTP Tf 3,85% Lg34", isin: "IT0005584856" },
   { tipo: "BTP", nome: "BTP Tf 4,15% Ot39", isin: "IT0005582421" },
-  { tipo: "Estero", nome: "Bund Germania 2,50%", isin: "DE000BU2Z023" },
-  { tipo: "Estero", nome: "OAT Francia 3,00%", isin: "FR001400QMF9" }
+  { tipo: "Estero", nome: "Bund Germania 2,50% Fb35", isin: "DE000BU2Z023" },
+  { tipo: "Estero", nome: "OAT Francia 3,00% Nv34", isin: "FR001400QMF9" },
+  { tipo: "Estero", nome: "Bonos Spagna 3,45% Ot34", isin: "ES0000012N35" }
 ];
 
-let lista = JSON.parse(localStorage.getItem("titoli_gh_v1")) || defaultData;
+let lista = JSON.parse(localStorage.getItem("titoli_gh_completo_v1")) || defaultData;
 
 function salva() {
-  localStorage.setItem("titoli_gh_v1", JSON.stringify(lista));
+  localStorage.setItem("titoli_gh_completo_v1", JSON.stringify(lista));
 }
 
-function getUrl(t) {
+function getUrlBorsa(t) {
   let path = "btp";
   if (t.tipo === "BOT") path = "bot";
   if (t.tipo === "Estero") path = "euro-obbligazioni";
   return "https://borsaitaliana.it" + path + "/scheda/" + t.isin + ".html?lang=it";
 }
 
+function aggiornaEvidenza(risultati) {
+  const box = document.getElementById("box-evidenza");
+  const validi = risultati.filter(x => x.prezzoNum > 0).sort((a, b) => a.prezzoNum - b.prezzoNum);
+  const top3 = validi.slice(0, 3);
+
+  if (top3.length === 0) {
+    box.innerHTML = "<div class='top-card'>Quotazioni in aggiornamento. Per i titoli scambiati solo su MOT Italia (come i BOT) clicca su 'Apri Borsa' nella tabella.</div>";
+    return;
+  }
+
+  let html = "";
+  top3.forEach((item, i) => {
+    html += "<div class='top-card'>" +
+            "<strong>#" + (i + 1) + " " + item.titolo.nome + "</strong> (" + item.titolo.tipo + ")<br>" +
+            "ISIN: <small>" + item.titolo.isin + "</small><br>" +
+            "Prezzo: <strong>" + item.prezzoStr + "</strong> | Var: <strong>" + item.varStr + "</strong>" +
+            "</div>";
+  });
+  box.innerHTML = html;
+}
+
 function caricaTabella() {
   const tbody = document.getElementById("tabella");
   const stato = document.getElementById("stato");
   tbody.innerHTML = "";
-  stato.innerText = "Connessione alla rete in corso...";
+  stato.innerText = "Scaricamento quotazioni dalla rete in corso...";
+
+  let completati = 0;
+  const risultati = [];
 
   lista.forEach((t, index) => {
     const tr = document.createElement("tr");
-    const link = getUrl(t);
-    tr.innerHTML = "<td><b>" + t.tipo + "</b></td>" +
-                   "<td><a href='" + link + "' target='_blank'>" + t.nome + "</a></td>" +
+    const link = getUrlBorsa(t);
+    const badgeClass = t.tipo.toLowerCase();
+
+    tr.innerHTML = "<td><span class='badge " + badgeClass + "'>" + t.tipo + "</span></td>" +
+                   "<td><a class='titolo-link' href='" + link + "' target='_blank'>" + t.nome + "</a></td>" +
                    "<td>" + t.isin + "</td>" +
                    "<td id='pr-" + index + "'>Caricamento...</td>" +
                    "<td id='rn-" + index + "'>Caricamento...</td>" +
+                   "<td><a href='" + link + "' target='_blank'>Borsa Italiana &rarr;</a></td>" +
                    "<td><button class='btn-del' data-idx='" + index + "'>Elimina</button></td>";
     tbody.appendChild(tr);
 
-    const proxy = "https://allorigins.win" + encodeURIComponent(link);
-    fetch(proxy)
-      .then(r => r.json())
-      .then(d => {
-        const doc = new DOMParser().parseFromString(d.contents, "text/html");
-        const pEl = doc.querySelector(".summary-value, .-value");
-        const prezzo = pEl ? pEl.textContent.trim() : "Vedi scheda";
-        let rend = "Vedi scheda";
-        doc.querySelectorAll("tr").forEach(row => {
-          if (row.textContent.toLowerCase().includes("rendimento effettivo a scadenza netto")) {
-            const tds = row.querySelectorAll("td");
-            if (tds.length > 1) rend = tds[1].textContent.trim();
-          }
-        });
-        document.getElementById("pr-" + index).innerText = prezzo;
-        document.getElementById("rn-" + index).innerText = rend;
-        stato.innerText = "Aggiornato alle " + new Date().toLocaleTimeString("it-IT");
+    const apiUrl = "https://boerse-frankfurt.de" + t.isin + "&mic=XFRA";
+
+    fetch(apiUrl)
+      .then(r => {
+        if (!r.ok) throw new Error("Non su XFRA");
+        return r.json();
+      })
+      .then(data => {
+        const pNum = data.lastPrice ? Number(data.lastPrice) : 0;
+        const prezzoStr = pNum > 0 ? pNum.toFixed(2).replace(".", ",") : "N/D";
+        const vNum = data.changeToPrevDayInPercent !== undefined && data.changeToPrevDayInPercent !== null ? Number(data.changeToPrevDayInPercent) : null;
+        const varStr = vNum !== null ? (vNum >= 0 ? "+" : "") + vNum.toFixed(2).replace(".", ",") + "%" : "-";
+
+        document.getElementById("pr-" + index).innerHTML = "<strong>" + prezzoStr + "</strong>";
+        document.getElementById("rn-" + index).innerText = varStr;
+
+        risultati.push({ titolo: t, prezzoNum: pNum, prezzoStr: prezzoStr, varStr: varStr });
       })
       .catch(() => {
-        document.getElementById("pr-" + index).innerHTML = "<a href='" + link + "' target='_blank'>Apri Borsa</a>";
+        document.getElementById("pr-" + index).innerText = "Solo MOT";
         document.getElementById("rn-" + index).innerText = "-";
+        risultati.push({ titolo: t, prezzoNum: 0, prezzoStr: "Solo MOT", varStr: "-" });
+      })
+      .finally(() => {
+        completati++;
+        if (completati === lista.length) {
+          aggiornaEvidenza(risultati);
+          const ora = new Date().toLocaleTimeString("it-IT");
+          const dataOggi = new Date().toLocaleDateString("it-IT");
+          stato.innerText = "Aggiornato dalla rete il " + dataOggi + " alle " + ora;
+        }
       });
   });
 }
@@ -124,7 +191,7 @@ document.getElementById("btn-aggiungi").addEventListener("click", () => {
   const nome = document.getElementById("nome").value.trim();
   const isin = document.getElementById("isin").value.trim().toUpperCase();
   if (!nome || isin.length !== 12) {
-    alert("Inserisci nome e ISIN di 12 caratteri");
+    alert("Inserisci un nome valido e un codice ISIN di 12 caratteri.");
     return;
   }
   lista.push({ tipo, nome, isin });
@@ -136,11 +203,17 @@ document.getElementById("btn-aggiungi").addEventListener("click", () => {
 
 document.getElementById("tabella").addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-del")) {
-    const idx = e.target.getAttribute("data-idx");
+    const idx = Number(e.target.getAttribute("data-idx"));
     lista.splice(idx, 1);
     salva();
     caricaTabella();
   }
+});
+
+document.getElementById("btn-reset").addEventListener("click", () => {
+  lista = defaultData.slice();
+  salva();
+  caricaTabella();
 });
 
 document.getElementById("btn-aggiorna").addEventListener("click", caricaTabella);
